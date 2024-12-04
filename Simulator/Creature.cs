@@ -2,22 +2,23 @@
 
 public class Creature
 {
-    public string name;
-    public int level;
+//Wlasciwosci automatyczne
+    public string Name { get; set; }
+    public int Level { get; set; }
 
-    public Creature(string name, int level)
+//Konstruktor
+    public Creature(string name, int level =  1)
     {
         Name = name;
         Level = level;
     }
-    public string Name
+    public Creature()
     {
-        get { return name; }
-        set { name = value; }
+       //nic nie robi 
     }
-    public int Level
+
+    public void SayHi()
     {
-        get { return level; }
-        set { level = level > 0 ? level : 1; }
+        Console.WriteLine($"Hi, I'm {Name}, my level is {Level}.");
     }
 }
