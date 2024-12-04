@@ -7,6 +7,6 @@ public class Animals
 
     public string Info
     {
-        get { return $"{Name} <{Size}>"};
+        get { return $"{Description} <{Size}>"; }
     }
 }
