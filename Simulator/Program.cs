@@ -5,7 +5,7 @@ internal class Program
     static void Main(string[] args)
     {
         Console.WriteLine("Starting Simulator!\n");
-
+        Creature Orc = new Creature();
         // Test #1
         Lab3a();
         Console.ReadKey();
