@@ -74,9 +74,9 @@ internal abstract class Creature
             }
         }
     }
-    public string Info
+    public abstract string Info
     {
-        get { return $"{Name} [{Level}]"; }
+        get;
     }
 
     // Constructors
@@ -130,6 +130,11 @@ internal abstract class Creature
         }
     }
 
+    public override string ToString()
+    {
+        return $"{GetType().Name.ToUpper()}: {Info}";
+    }
+
     // Elf and Orc
     public class Elf : Creature
     {
@@ -139,6 +144,8 @@ internal abstract class Creature
 
         //Power level
         public override int Power => 8 * Level + 2 * _agility;
+
+        public override string Info => $"{Name} [{Level}][{Agility}]";
         public int Agility
         {
             get => _agility;
@@ -174,8 +181,7 @@ internal abstract class Creature
 
         public Elf(string name, int level = 1, int agility = 1) : base(name, level)
         {
-            Agility = agility;
-            _agility = agility;
+            Agility = Validator.Limiter(agility, 0, 10);
         }
 
         public override void SayHi() => Console.WriteLine(
@@ -192,6 +198,8 @@ internal abstract class Creature
 
         //Power level
         public override int Power => 7 * Level + 3 * _rage;
+
+        public override string Info => $"{Name} [{Level}][{Rage}]";
         public int Rage 
         {  
             get => _rage;

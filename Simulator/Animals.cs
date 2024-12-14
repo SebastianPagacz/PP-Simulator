@@ -7,7 +7,7 @@ internal class Animals
     int shortNameLen = 3;
     int longNameLen = 15;
     private string _description = "Unknown";
-    public string Info 
+    public virtual string Info 
     { 
         get { return $"{Description} <{Size}>"; }
     }
@@ -16,32 +16,24 @@ internal class Animals
         get => _description;
         init
         {
-        _description = value;
-        while (_description[0] == ' ' || _description[^1] == ' ' || _description.Length < shortNameLen || _description.Length > longNameLen)
-        {
-            // Trimming whitespaces
-            _description = _description.Trim();
-
-            // Adjusting length
-            if (_description.Length < 3)
-            {
-                while (_description.Length < shortNameLen)
-                {
-                    _description += "#";
-                }
-            }
-
-            if (_description.Length > longNameLen)
-            {
-                int toCut = _description.Length - longNameLen;
-                _description = _description[..^toCut];
-            }
-        }
-
-            // First liter capital
+            _description = Validator.Shortener(value, shortNameLen, longNameLen, '#');
             _description = char.ToUpper(_description[0]) + _description.Substring(1);
         }
     } 
     
     public uint Size { get; set; } = 3;
+
+
+    public class Birds : Animals
+    {
+        public bool CanFly { get; init; } = true;
+
+        public override string ToString()
+        {
+            return $"{GetType().Name.ToUpper()}: {Info}";
+        }
+
+        public override string Info => $"{Description} (fly{(CanFly ? "+" : "-")}) <{Size}>";
+
+    }
 }
