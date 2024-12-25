@@ -1,6 +1,4 @@
-﻿using System.Xml.Linq;
-
-namespace Simulator;
+﻿namespace Simulator;
 
 internal class Animals
 {
@@ -23,16 +21,14 @@ internal class Animals
     
     public uint Size { get; set; } = 3;
 
+    public override string ToString()
+    {
+        return $"{GetType().Name.ToUpper()}: {Info}";
+    }
 
     public class Birds : Animals
     {
         public bool CanFly { get; init; } = true;
-
-        public override string ToString()
-        {
-            return $"{GetType().Name.ToUpper()}: {Info}";
-        }
-
         public override string Info => $"{Description} (fly{(CanFly ? "+" : "-")}) <{Size}>";
 
     }
