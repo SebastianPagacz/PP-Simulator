@@ -1,10 +1,13 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
+
+namespace Simulator;
 
 internal class Program
 {
     static void Main(string[] args)
     {
-        Lab5a();
+        //Lab5a();
+        Lab5b();
     }
     public static void Lab5a()
     {
@@ -51,4 +54,65 @@ internal class Program
             Console.WriteLine($"Error: {ex.Message}");
         }
     }
+
+
+    public static void Lab5b()
+    {
+        // Test class construction and size validation
+        Console.WriteLine("Test construction and size validation:");
+
+        try
+        {
+            var map = new SmallSquareMap(4);  // size out of range
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine(ex.Message);  // Check if the exception is thrown
+        }
+
+        try
+        {
+            var map = new SmallSquareMap(21);  // size out of range
+        }
+        catch (ArgumentOutOfRangeException ex)
+        {
+            Console.WriteLine(ex.Message);  // Check if the exception is thrown
+        }
+
+        var validMap = new SmallSquareMap(10);  // valid size
+        Console.WriteLine($"Map created with size: {validMap.Size}");  // Check if map is created correctly
+
+        // Test Exist method
+        Console.WriteLine("\nTesting the Exist method:");
+
+        var pointInside = new Point(5, 5);
+        bool isInside = validMap.Exist(pointInside);
+        Console.WriteLine($"Point {pointInside} inside map: {isInside}");
+
+        var pointOutside = new Point(15, 15);
+        bool isOutside = validMap.Exist(pointOutside);
+        Console.WriteLine($"Point {pointOutside} inside map: {isOutside}");
+
+        // Test Next method
+        Console.WriteLine("\nTesting the Next method:");
+
+        var startPoint = new Point(5, 5);
+        var direction = Direction.Right;  // Example direction
+        var nextPoint = validMap.Next(startPoint, direction);
+        Console.WriteLine($"Next point from {startPoint} towards {direction}: {nextPoint}");
+
+        var outOfBoundsPoint = new Point(10, 10);
+        var nextOutOfBounds = validMap.Next(outOfBoundsPoint, Direction.Up);  // Point outside the map
+        Console.WriteLine($"Next point from {outOfBoundsPoint} towards Up (out of bounds): {nextOutOfBounds}");
+
+        // Test NextDiagonal method
+        Console.WriteLine("\nTesting the NextDiagonal method:");
+
+        var diagonalNextPoint = validMap.NextDiagonal(startPoint, Direction.UpRight);
+        Console.WriteLine($"Next diagonal point from {startPoint} towards UpRight: {diagonalNextPoint}");
+
+        var diagonalOutOfBounds = validMap.NextDiagonal(outOfBoundsPoint, Direction.UpRight);
+        Console.WriteLine($"Next diagonal point from {outOfBoundsPoint} towards UpRight (out of bounds): {diagonalOutOfBounds}");
+    }
 }
+
