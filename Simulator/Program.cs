@@ -108,10 +108,10 @@ internal class Program
         // Test NextDiagonal method
         Console.WriteLine("\nTesting the NextDiagonal method:");
 
-        var diagonalNextPoint = validMap.NextDiagonal(startPoint, Direction.UpRight);
+        var diagonalNextPoint = validMap.NextDiagonal(startPoint, Direction.Up);
         Console.WriteLine($"Next diagonal point from {startPoint} towards UpRight: {diagonalNextPoint}");
 
-        var diagonalOutOfBounds = validMap.NextDiagonal(outOfBoundsPoint, Direction.UpRight);
+        var diagonalOutOfBounds = validMap.NextDiagonal(outOfBoundsPoint, Direction.Up);
         Console.WriteLine($"Next diagonal point from {outOfBoundsPoint} towards UpRight (out of bounds): {diagonalOutOfBounds}");
     }
 }
