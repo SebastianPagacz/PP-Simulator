@@ -92,7 +92,7 @@ internal abstract class Creature
     }
 
     // Creature methods
-    public abstract void SayHi();
+    public abstract string Greeting();
 
     public void Upgrade()
     {
@@ -103,11 +103,11 @@ internal abstract class Creature
     }
 
     // Directions handling
-    public void Go(Direction direction)
+    public string Go(Direction direction)
     {
         string directionStr = char.ToLower(direction.ToString()[0]) + direction.ToString().Substring(1);
 
-        Console.WriteLine($"{Name} goes {directionStr}");
+        return $"{Name} goes {directionStr}";
     }
 
 
@@ -163,15 +163,15 @@ internal abstract class Creature
                 }
             }
         }
-        public void Sing()
+        public string Sing()
         {
-            singCount++; 
-            Console.WriteLine($"{Name} is singing.");
+            singCount++;
 
             if(singCount % 3 == 0)
             {
                 _agility = Math.Min(_agility + 1, 10);
             }
+            return $"{Name} is singing.";
         }
 
         public Elf() : base() 
@@ -184,13 +184,11 @@ internal abstract class Creature
             Agility = Validator.Limiter(agility, 0, 10);
         }
 
-        public override void SayHi() => Console.WriteLine(
-            $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}."
-        );
+        public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}.";
     }
 
 
-    public class    Orc : Creature
+    public class Orc : Creature
     {
         private int _rage;
         //Hunt count
@@ -217,14 +215,14 @@ internal abstract class Creature
                 }
             } 
         }
-        public void Hunt()
+        public string Hunt()
         {
             rageCount++;
-            Console.WriteLine($"{Name} is hunting.");
             if (rageCount % 2 == 0)
             {
                 _rage = Math.Min(_rage + 1, 10);
             }
+            return $"{Name} is hunting.";
         }
 
         public Orc() : base() 
@@ -238,9 +236,7 @@ internal abstract class Creature
             _rage = rage;
         }
 
-        public override void SayHi() => Console.WriteLine(
-            $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}."
-        );
+        public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.";
     }
 
 }
