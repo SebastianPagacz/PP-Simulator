@@ -1,6 +1,4 @@
-﻿using System.Drawing;
-
-namespace Simulator.Maps
+﻿namespace Simulator.Maps
 {
     public class SmallSquareMap : Map
     {
@@ -8,7 +6,7 @@ namespace Simulator.Maps
 
         public override bool Exist(Point p)
         {
-            return p.X <= Size && p.Y <= Size && p.X >= Size && p.Y >= Size;
+            return p.X >= 0 && p.Y >= 0 && p.X <= Size && p.Y <= Size;
         }
         public override Point Next(Point p, Direction d)
         {
