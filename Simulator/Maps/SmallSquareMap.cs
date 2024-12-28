@@ -8,7 +8,7 @@ namespace Simulator.Maps
 
         public override bool Exist(Point p)
         {
-            return p.X <= Size && p.Y <= Size;
+            return p.X <= Size && p.Y <= Size && p.X >= Size && p.Y >= Size;
         }
         public override Point Next(Point p, Direction d)
         {
