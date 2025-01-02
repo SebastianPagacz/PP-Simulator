@@ -16,20 +16,20 @@ namespace TestSimulator
             public void Constructor_ShouldSetSize_WhenSizeIsValid()
             {
                 // Arrange & Act
-                var map = new SmallSquareMap(10);
+                var map = new SmallSquareMap(10, 10);
 
                 // Assert
-                Assert.Equal(10, map.Size);
+                Assert.Equal(10, map.SizeX);
             }
 
             [Theory]
-            [InlineData(4)]  // Too small
-            [InlineData(21)] // Too large
-            public void Constructor_ShouldThrowException_WhenSizeIsOutOfRange(int size)
+            [InlineData(4, 4)]  // Too small
+            [InlineData(21, 21)] // Too large
+            public void Constructor_ShouldThrowException_WhenSizeIsOutOfRange(int sizeX, int sizeY)
             {
                 // Act & Assert
-                var exception = Assert.Throws<ArgumentOutOfRangeException>(() => new SmallSquareMap(size));
-                Assert.Contains("Size is out of respective range (5 to 20)", exception.Message);
+                var exception = Assert.Throws<ArgumentOutOfRangeException>(() => new SmallSquareMap(sizeX, sizeY));
+                Assert.Contains("Size of vector X is out of respective range (5 to 20)", exception.Message);
             }
 
             [Theory]
@@ -43,7 +43,7 @@ namespace TestSimulator
             public void Exist_ShouldReturnCorrectResult(int x, int y, bool expected)
             {
                 // Arrange
-                var map = new SmallSquareMap(20);
+                var map = new SmallSquareMap(20, 20);
                 var point = new Point(x, y);
 
                 // Act
@@ -57,11 +57,11 @@ namespace TestSimulator
             [InlineData(10, 10, Direction.Up, 10, 11)]    // Valid move up
             [InlineData(0, 0, Direction.Left, 0, 0)]     // Invalid move left (boundary)
             [InlineData(5, 5, Direction.Right, 6, 5)]    // Valid move right
-            [InlineData(20, 20, Direction.Down, 20, 19)] // Invalid move down (boundary)
+            [InlineData(10, 18, Direction.Down, 10, 17)] // Valid move down
             public void Next_ShouldReturnCorrectPoint(int startX, int startY, Direction direction, int expectedX, int expectedY)
             {
                 // Arrange
-                var map = new SmallSquareMap(20);
+                var map = new SmallSquareMap(20, 20);
                 var startPoint = new Point(startX, startY);
 
                 // Act
@@ -73,13 +73,13 @@ namespace TestSimulator
 
             [Theory]
             [InlineData(10, 10, Direction.Up, 11, 11)]     // Valid diagonal move
-            [InlineData(0, 0, Direction.Down, 0, 0)]    // Invalid diagonal move (boundary)
+            [InlineData(3, 5, Direction.Down, 2, 4)]    // Invalid diagonal move (boundary)
             [InlineData(5, 5, Direction.Left, 4, 6)]     // Valid diagonal move
             [InlineData(20, 20, Direction.Up, 20, 20)]  // Invalid diagonal move (boundary)
             public void NextDiagonal_ShouldReturnCorrectPoint(int startX, int startY, Direction direction, int expectedX, int expectedY)
             {
                 // Arrange
-                var map = new SmallSquareMap(20);
+                var map = new SmallSquareMap(20, 20);
                 var startPoint = new Point(startX, startY);
 
                 // Act

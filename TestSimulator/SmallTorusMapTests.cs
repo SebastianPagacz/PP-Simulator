@@ -9,36 +9,37 @@ public class SmallTorusMapTests
     public void Constructor_ValidSize_ShouldSetSize()
     {
         // Arrange
-        int size = 10;
+        int sizeX = 10;
+        int sizeY = 10;
         // Act
-        var map = new SmallTorusMap(size);
+        var map = new SmallTorusMap(sizeX, sizeY);
         // Assert
-        Assert.Equal(size, map.Size);
+        Assert.Equal(sizeX, map.SizeX);
     }
 
     [Theory]
-    [InlineData(4)]
-    [InlineData(21)]
+    [InlineData(4, 4)]
+    [InlineData(21, 21)]
     public void
         Constructor_InvalidSize_ShouldThrowArgumentOutOfRangeException
-        (int size)
+        (int sizeX, int sizeY)
     {
         // Act & Assert
         // The way to check if method throws anticipated exception:
         Assert.Throws<ArgumentOutOfRangeException>(() =>
-             new SmallTorusMap(size));
+             new SmallTorusMap(sizeX, sizeY));
     }
 
     [Theory]
-    [InlineData(3, 4, 5, true)]
-    [InlineData(6, 1, 5, false)]
-    [InlineData(19, 19, 20, true)]
-    [InlineData(20, 20, 20, false)]
+    [InlineData(3, 4, 5, 5, true)]
+    [InlineData(6, 1, 5, 5, false)]
+    [InlineData(18, 18, 19, 19, true)]
+    [InlineData(20, 20, 20, 20, false)]
     public void Exist_ShouldReturnCorrectValue(int x, int y,
-        int size, bool expected)
+        int sizeX, int sizeY, bool expected)
     {
         // Arrange
-        var map = new SmallTorusMap(size);
+        var map = new SmallTorusMap(sizeX, sizeY);
         var point = new Point(x, y);
         // Act
         var result = map.Exist(point);
@@ -55,7 +56,7 @@ public class SmallTorusMapTests
         Direction direction, int expectedX, int expectedY)
     {
         // Arrange
-        var map = new SmallTorusMap(20);
+        var map = new SmallTorusMap(20, 20);
         var point = new Point(x, y);
         // Act
         var nextPoint = map.Next(point, direction);
@@ -72,7 +73,7 @@ public class SmallTorusMapTests
         Direction direction, int expectedX, int expectedY)
     {
         // Arrange
-        var map = new SmallTorusMap(20);
+        var map = new SmallTorusMap(20, 20);
         var point = new Point(x, y);
         // Act
         var nextPoint = map.NextDiagonal(point, direction);

@@ -122,7 +122,7 @@ internal abstract class Creature
     public void Go(string direction)
     {
         // Using parser
-        Direction[] directions = DirectionParser.Parse(direction);
+        List<Direction> directions = DirectionParser.Parse(direction);
 
         foreach (var dir in directions)
         {

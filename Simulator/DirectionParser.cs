@@ -2,30 +2,29 @@
 
 public static class DirectionParser
 {
-    public static Direction[] Parse(string input)
+    public static List<Direction> Parse(string input)
     {
         // directions list
-        var directions = new System.Collections.Generic.List<Direction>();
+        List<Direction> Parser = new();
 
         foreach (var c in input.ToUpper()) // Capitals
         {
             switch (c)
             {
                 case 'U':
-                    directions.Add(Direction.Up);
+                    Parser.Add(Direction.Up);
                     break;
                 case 'R':
-                    directions.Add(Direction.Right);
+                    Parser.Add(Direction.Right);
                     break;
                 case 'D':
-                    directions.Add(Direction.Down);
+                    Parser.Add(Direction.Down);
                     break;
                 case 'L':
-                    directions.Add(Direction.Left);
+                    Parser.Add(Direction.Left);
                     break;
             }
         }
-
-        return directions.ToArray();
+        return Parser;
     }
 }

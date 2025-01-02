@@ -1,32 +1,44 @@
-﻿namespace Simulator.Maps
+﻿namespace Simulator.Maps;
+
+public class SmallSquareMap : SmallMap
 {
-    public class SmallSquareMap : Map
+    public SmallSquareMap(int sizeX, int sizeY) : base(sizeX, sizeY)
     {
-        public int Size { get; }
+        SizeX = sizeX;
+        SizeY = sizeY;
+    }
 
-        public override bool Exist(Point p)
+    public int SizeX { get; }
+    public int SizeY { get; }
+    public override bool Exist(Point p)
+    {
+        return p.X >= 0 && p.Y >= 0 && p.X < SizeX && p.Y < SizeY;
+    }
+    public override Point Next(Point p, Direction d)
+    {
+        Point n = p.Next(d);
+        if (Exist(n))
         {
-            return p.X >= 0 && p.Y >= 0 && p.X <= Size && p.Y <= Size;
+            return n;
         }
-        public override Point Next(Point p, Direction d)
+        else
         {
-            Point n = p.Next(d);
-            return Exist(n) ? n : p;
+            return p;
         }
+    }
 
-        public override Point NextDiagonal(Point p, Direction d)
+    public override Point NextDiagonal(Point p, Direction d)
+    {
+        Point n = p.NextDiagonal(d);
+        if (Exist(n))
         {
-            Point n = p.NextDiagonal(d);
-            return Exist(n) ? n : p;
+            return n;
         }
-
-        public SmallSquareMap(int size)
+        else
         {
-           if (size < 5 || size > 20)
-           {
-               throw new ArgumentOutOfRangeException(nameof(size), "Size is out of respective range (5 to 20)");
-           }
-           Size = size;
+            return p;
         }
     }
 }
+
+
