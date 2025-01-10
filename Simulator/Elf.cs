@@ -1,4 +1,5 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
+namespace Simulator;
 
 public class Elf : Creature
 {
@@ -43,7 +44,7 @@ public class Elf : Creature
         _agility = Agility;
     }
 
-    public Elf(string name, Point position, int level = 1, int agility = 1) : base(name, position, level)
+    public Elf(string name, Map? map = null, int level = 1, Point? position = null, int agility = 1) : base(name, map, level, position)
     {
         Agility = Validator.Limiter(agility, 0, 10);
     }

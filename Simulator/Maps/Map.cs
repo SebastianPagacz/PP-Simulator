@@ -53,4 +53,5 @@ public abstract class Map
     /// <returns></returns>
     public abstract void Remove(Creature creature, Point point);
 
+    public abstract IEnumerable<Creature> At(Point point);
 }

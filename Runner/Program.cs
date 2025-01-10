@@ -1,22 +1,40 @@
-﻿using Simulator;
+﻿using SimConsole;
+using Simulator;
 using Simulator.Maps;
+using System.Text;
 namespace Runner;
 
-internal class Program
+public class Program
 {
     static void Main(string[] args)
     {
-        Orc orc1 = new Orc("Dupka", new Point (1, 1));
+        Console.OutputEncoding = Encoding.UTF8;
 
-        Console.WriteLine(orc1.Go(Direction.Up));
+        SmallSquareMap map = new SmallSquareMap(new Point(5, 5));
+        List<Creature> creatures = new List<Creature>
+            {
+                new Orc("Gorbag"),
+                new Elf("Elandor")
+            };
+        List<Point> points = new List<Point>
+            {
+                new Point(2, 2),
+                new Point(3, 1)
+            };
+        string moves = "dlrludl";
 
-        orc1.Go(Direction.Right);
-        orc1.Go(Direction.Right);
+        Simulation simulation = new Simulation(map, creatures, points, moves);
+        MapVisualizer mapVisualizer = new MapVisualizer(simulation.Map);
 
-        Console.WriteLine(orc1.Greeting());
-        Console.WriteLine(orc1.WhereCreature());
+        while (!simulation.Finished)
+        {
+            mapVisualizer.Draw();
+            Console.WriteLine("Press any key to proceed to the next turn...");
+            Console.ReadKey(true); 
+            simulation.Turn();
+        }
 
-        SmallSquareMap map1 = new SmallSquareMap(10, 10);
-        Console.WriteLine(map1.SizeX);
+        mapVisualizer.Draw();
+        Console.WriteLine("Simulation finished!");
     }
 }

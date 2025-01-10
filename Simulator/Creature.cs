@@ -8,8 +8,8 @@ public abstract class Creature
     // Member variables
     private string _name = "Unknown";
     private int _level = 1;
-    private Point _position;
-    private Map? _map;
+    private Point? _position = null;
+    private Map? _map = null;
 
     // Name Lenght variables
     int shortNameLen = 3;
@@ -95,11 +95,11 @@ public abstract class Creature
     }
     public Point? Position { get; set; }
     // Constructors
-    protected Creature(string name, Point? position, Map? map, int level = 1)
+    protected Creature(string name, Map? map = null, int level = 1, Point? position = null)
     {
         Name = name;
         Level = level;
-        Position = position;
+        Position = position ?? new Point(0, 0); 
         Map = map;
     }
 
@@ -122,16 +122,22 @@ public abstract class Creature
     // Directions handling
     public Point Go(Direction direction)
     {
-        if (Map != null && Position != null)
+        if (Map == null || Position == null)
         {
-            Point newPosition = Map.Move(this, (Point)Position, direction);
-            if (!newPosition.Equals((Point)Position)) 
-            {
-                Position = newPosition;
-            }
+            Console.WriteLine($"[ERROR] Creature {Name} has invalid Map or Position. Map: {Map}, Position: {Position}");
+            throw new InvalidOperationException("Creature must be placed on a map with a valid position before moving.");
         }
-        return (Point)Position; 
+
+        // Pobieramy nową pozycję z mapy
+        Point newPosition = Map.Move(this, Position.Value, direction);
+
+        // Aktualizujemy pozycję stworzenia
+        Position = newPosition;
+
+        return newPosition;
     }
+
+
 
     public override string ToString()
     {

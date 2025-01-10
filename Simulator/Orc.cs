@@ -1,4 +1,5 @@
-﻿namespace Simulator;
+﻿using Simulator.Maps;
+namespace Simulator;
 
 public class Orc : Creature
 {
@@ -42,7 +43,7 @@ public class Orc : Creature
         Rage = _rage;
     }
 
-    public Orc(string name, Point position, int level = 1, int rage = 0) : base(name, position, level)
+    public Orc(string name, Map? map = null, int level = 1, Point? position = null, int rage = 0) : base(name, map, level, position)
     {
         Rage = rage;
         _rage = rage;

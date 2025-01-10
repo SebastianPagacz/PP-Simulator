@@ -2,10 +2,9 @@
 
 public class SmallSquareMap : SmallMap
 {
-    public SmallSquareMap(int sizeX, int sizeY) : base(sizeX, sizeY)
+    public SmallSquareMap(Point point) : base(point)
     {
-        SizeX = sizeX;
-        SizeY = sizeY;
+        
     }
 
     public int SizeX { get; }
