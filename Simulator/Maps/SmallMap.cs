@@ -2,6 +2,13 @@
 
 public class SmallMap : Map
 {
+    protected const int MinSizeX = 5;
+    protected const int MinSizeY = 5;
+
+    private const int MaxSizeX = 20;
+    private const int MaxSizeY = 20;
+
+
     private Dictionary<Point, List<IMappable>> mapItems = new();
     public Point Point { get; }
     public override bool Exist(Point p)
@@ -21,15 +28,22 @@ public class SmallMap : Map
 
     public SmallMap(Point point)
     {
-        if (point.X < 5 || point.X > 20)
+        ValidateSize(point.X, point.Y);
+
+        if (point.X > MaxSizeX || point.Y > MaxSizeY)
         {
-            throw new ArgumentOutOfRangeException(nameof(point.X), "Size of vector X is out of respective range (5 to 20)");
+            throw new ArgumentException($"Map dimensions must not exceed {MaxSizeX}x{MaxSizeY}.");
         }
-        if (point.Y < 5 || point.Y > 20)
+
+        Point = point;
+    }
+
+    protected void ValidateSize(int sizeX, int sizeY)
+    {
+        if (sizeX < MinSizeX || sizeY < MinSizeY)
         {
-            throw new ArgumentOutOfRangeException(nameof(point.Y), "Size of vector Y is out of respective range (5 to 20)");
+            throw new ArgumentException($"Map dimensions must be at least {MinSizeX}x{MinSizeY}.");
         }
-        Point = new Point(point.X, point.Y);
     }
 
     public override void Add(IMappable item, Point point)
@@ -58,18 +72,25 @@ public class SmallMap : Map
     public override Point Move(IMappable item, Point from, Direction direction)
     {
         Point newPosition = Next(from, direction);
-        if (Exist(newPosition))
+
+        if (!Exist(newPosition))
         {
-            Remove(item, from);
-            Add(item, newPosition);
-            return newPosition;
+            Console.WriteLine($"[DEBUG] Move aborted: {item.Name} attempted to move outside the map to {newPosition}.");
+            return from; // Zatrzymaj ruch, jeśli nowa pozycja jest poza mapą
         }
-        return from;
+
+        Remove(item, from);
+        Add(item, newPosition);
+
+        return newPosition;
     }
 
 
     public override IEnumerable<IMappable> At(Point point)
     {
-        return mapItems.TryGetValue(point, out List<IMappable> list) ? list : Enumerable.Empty<IMappable>();
+        if (!mapItems.ContainsKey(point))
+            return Enumerable.Empty<IMappable>();
+
+        return mapItems[point];
     }
 }

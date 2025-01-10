@@ -80,22 +80,18 @@ public class Simulation
 
         for (int i = 0; i < items.Count; i++)
         {
-            Console.WriteLine($"[DEBUG] Initializing {items[i].Name}...");
-
-            items[i].Map = map; // Przypisanie mapy
-            items[i].Position = positions[i]; // Przypisanie pozycji
-            map.Add(items[i], positions[i]); // Dodanie na mapę
-
-            if (items[i].Map == null)
+            Point position = positions[i];
+            if (!map.Exist(position))
             {
-                Console.WriteLine($"[ERROR] {items[i].Name} has no map after initialization!");
-            }
-            if (items[i].Position == null)
-            {
-                Console.WriteLine($"[ERROR] {items[i].Name} has no position after initialization!");
+                Console.WriteLine($"[WARNING] Initial position {position} for {items[i].Name} is outside the map boundaries. Assigning to position (0,0).");
+                position = new Point(0, 0); // Przypisz pozycję domyślną
             }
 
-            Console.WriteLine($"[DEBUG] Added {items[i].Name} at position {positions[i]} to the map.");
+            items[i].Map = map;
+            items[i].Position = position;
+            map.Add(items[i], position);
+
+            Console.WriteLine($"[DEBUG] Added {items[i].Name} ({items[i].Symbol}) at position {position}.");
         }
     }
 
@@ -128,11 +124,12 @@ public class Simulation
             throw new NullReferenceException($"Item {currentItem.Name} has no assigned position.");
         }
 
-        Console.WriteLine($"[DEBUG] Turn {_currentTurn + 1}: Moving {currentItem.Name}");
+        Console.WriteLine($"[DEBUG] Turn {_currentTurn + 1}: Moving {currentItem.Name} ({currentItem.Symbol}).");
 
+        // Wykonanie ruchu
         currentItem.Move(_parsedMoves[_currentTurn % _parsedMoves.Count]);
 
-        Console.WriteLine($"[DEBUG] {currentItem.Name} moved to {currentItem.Position}");
+        Console.WriteLine($"[DEBUG] {currentItem.Name} moved to {currentItem.Position}.");
 
         _currentTurn++;
 

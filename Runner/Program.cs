@@ -10,22 +10,29 @@ public class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        SmallSquareMap map = new SmallSquareMap(new Point(5, 5));
+        SmallTorusMap map = new SmallTorusMap(5);
         List<IMappable> items = new List<IMappable>
 {
+    new Elf("Elandor"),
     new Orc("Gorbag"),
-    new Elf("Elandor")
+    new Animals("Rabbit"),
+    new Animals.Birds("Eagle", canFly: true),
+    new Animals.Birds("Ostrich", canFly: false)
 };
 
+        // Przypisujemy pozycje
         List<Point> positions = new List<Point>
 {
     new Point(2, 2),
-    new Point(3, 1)
+    new Point(3, 1),
+    new Point(1, 4),
+    new Point(5, 5),
+    new Point(4, 3)
 };
 
-        string moves = "dlru";
+        // Tworzymy symulację
+        Simulation simulation = new Simulation(map, items, positions, "dddd");
 
-        Simulation simulation = new Simulation(map, items, positions, moves);
         MapVisualizer mapVisualizer = new MapVisualizer(simulation.Map);
 
         while (!simulation.Finished)

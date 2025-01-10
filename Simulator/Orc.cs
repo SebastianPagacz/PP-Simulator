@@ -37,7 +37,7 @@ public class Orc : Creature
         }
         return $"{Name} is hunting.";
     }
-
+    public override char Symbol => 'O';
     public Orc() : base()
     {
         Rage = _rage;

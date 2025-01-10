@@ -2,17 +2,16 @@
 
 public class SmallSquareMap : SmallMap
 {
-    public SmallSquareMap(Point point) : base(point)
+    public SmallSquareMap(int size) : base(new Point(size, size))
     {
-        
-    }
+       if (size > 20)
+       {
+           throw new ArgumentException("Maximum size for a SmallSquareMap is 20.");
+       }
+        Console.WriteLine($"[DEBUG] Created SmallSquareMap with size {size}x{size}.");
+    } 
+    
 
-    public int SizeX { get; }
-    public int SizeY { get; }
-    //public override bool Exist(Point p)
-    //{
-    //    return p.X >= 0 && p.Y >= 0 && p.X < SizeX && p.Y < SizeY;
-    //}
     public override Point Next(Point p, Direction d)
     {
         Point n = p.Next(d);

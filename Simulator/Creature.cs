@@ -20,7 +20,7 @@ namespace Simulator
                 _name = char.ToUpper(_name[0]) + _name.Substring(1);
             }
         }
-
+        public virtual char Symbol => 'C';
         public Point? Position { get; set; }
 
         public Map? Map { get; set; }

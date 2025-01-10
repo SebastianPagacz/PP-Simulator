@@ -38,7 +38,7 @@ public class Elf : Creature
         }
         return $"{Name} is singing.";
     }
-
+    public override char Symbol => 'E';
     public Elf() : base()
     {
         _agility = Agility;
