@@ -11,19 +11,21 @@ public class Program
         Console.OutputEncoding = Encoding.UTF8;
 
         SmallSquareMap map = new SmallSquareMap(new Point(5, 5));
-        List<Creature> creatures = new List<Creature>
-            {
-                new Orc("Gorbag"),
-                new Elf("Elandor")
-            };
-        List<Point> points = new List<Point>
-            {
-                new Point(2, 2),
-                new Point(3, 1)
-            };
-        string moves = "dlrludl";
+        List<IMappable> items = new List<IMappable>
+{
+    new Orc("Gorbag"),
+    new Elf("Elandor")
+};
 
-        Simulation simulation = new Simulation(map, creatures, points, moves);
+        List<Point> positions = new List<Point>
+{
+    new Point(2, 2),
+    new Point(3, 1)
+};
+
+        string moves = "dlru";
+
+        Simulation simulation = new Simulation(map, items, positions, moves);
         MapVisualizer mapVisualizer = new MapVisualizer(simulation.Map);
 
         while (!simulation.Finished)

@@ -2,7 +2,7 @@
 
 public class SmallMap : Map
 {
-    private Dictionary<Point, List<Creature>> creatures = new Dictionary<Point, List<Creature>>();
+    private Dictionary<Point, List<IMappable>> mapItems = new();
     public Point Point { get; }
     public override bool Exist(Point p)
     {
@@ -32,48 +32,44 @@ public class SmallMap : Map
         Point = new Point(point.X, point.Y);
     }
 
-    public override void Add(Creature creature, Point point)
+    public override void Add(IMappable item, Point point)
     {
-        if (!creatures.ContainsKey(point))
+        if (!mapItems.ContainsKey(point))
         {
-            creatures[point] = new List<Creature>();
+            mapItems[point] = new List<IMappable>();
         }
-        creatures[point].Add(creature);
+        mapItems[point].Add(item);
     }
 
 
-    public override void Remove(Creature creature, Point point)
+    public override void Remove(IMappable item, Point point)
     {
-        if (creatures.TryGetValue(point, out List<Creature> list))
+        if (mapItems.TryGetValue(point, out List<IMappable> list))
         {
-            list.Remove(creature);
+            list.Remove(item);
             if (list.Count == 0)
             {
-                creatures.Remove(point);
+                mapItems.Remove(point);
             }
         }
     }
 
 
-    public override Point Move(Creature creature, Point from, Direction direction)
+    public override Point Move(IMappable item, Point from, Direction direction)
     {
         Point newPosition = Next(from, direction);
-
         if (Exist(newPosition))
         {
-            Remove(creature, from);
-
-            Add(creature, newPosition);
-
+            Remove(item, from);
+            Add(item, newPosition);
             return newPosition;
         }
-
         return from;
     }
 
 
-    public override IEnumerable<Creature> At(Point point)
+    public override IEnumerable<IMappable> At(Point point)
     {
-        return creatures.TryGetValue(point, out List<Creature> list) ? list : Enumerable.Empty<Creature>();
+        return mapItems.TryGetValue(point, out List<IMappable> list) ? list : Enumerable.Empty<IMappable>();
     }
 }

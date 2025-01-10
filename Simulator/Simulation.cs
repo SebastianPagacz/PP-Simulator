@@ -4,85 +4,100 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Simulator.Maps;
+
 namespace Simulator;
 
-    public class Simulation
+public class Simulation
+{
+    /// <summary>
+    /// Simulation's map.
+    /// </summary>
+    public Map Map { get; }
+
+    /// <summary>
+    /// Creatures moving on the map.
+    /// </summary>
+    public List<IMappable> Items { get; }
+
+    /// <summary>
+    /// Starting positions of creatures.
+    /// </summary>
+    public List<Point> Positions { get; }
+
+    /// <summary>
+    /// Cyclic list of creatures moves. 
+    /// Bad moves are ignored - use DirectionParser.
+    /// First move is for first creature, second for second and so on.
+    /// When all creatures make moves, 
+    /// next move is again for first creature and so on.
+    /// </summary>
+    public string Moves { get; }
+
+    /// <summary>
+    /// Has all moves been done?
+    /// </summary>
+    public bool Finished { get; private set; } = false;
+
+    /// <summary>
+    /// Creature which will be moving current turn.
+    /// </summary>
+    public Creature? CurrentCreature
     {
-        /// <summary>
-        /// Simulation's map.
-        /// </summary>
-        public Map Map { get; }
+        get
+        {
+            var item = Items[_currentTurn % Items.Count];
+            return item as Creature; // Zwróć null, jeśli nie jest typu Creature
+        }
+    }
 
-        /// <summary>
-        /// Creatures moving on the map.
-        /// </summary>
-        public List<Creature> Creatures { get; }
+    /// <summary>
+    /// Lowercase name of direction which will be used in current turn.
+    /// </summary>
+    public string CurrentMoveName => _parsedMoves[_currentTurn % _parsedMoves.Count].ToString().ToLower();
 
-        /// <summary>
-        /// Starting positions of creatures.
-        /// </summary>
-        public List<Point> Positions { get; }
-
-        /// <summary>
-        /// Cyclic list of creatures moves. 
-        /// Bad moves are ignored - use DirectionParser.
-        /// First move is for first creature, second for second and so on.
-        /// When all creatures make moves, 
-        /// next move is again for first creature and so on.
-        /// </summary>
-        public string Moves { get; }
-
-        /// <summary>
-        /// Has all moves been done?
-        /// </summary>
-        public bool Finished { get; private set; } = false;
-
-        /// <summary>
-        /// Creature which will be moving current turn.
-        /// </summary>
-        public Creature CurrentCreature => Creatures[_currentTurn % Creatures.Count];
-
-        /// <summary>
-        /// Lowercase name of direction which will be used in current turn.
-        /// </summary>
-        public string CurrentMoveName => _parsedMoves[_currentTurn % _parsedMoves.Count].ToString().ToLower();
-
-        private readonly List<Direction> _parsedMoves;
-        private int _currentTurn = 0;
+    private readonly List<Direction> _parsedMoves;
+    private int _currentTurn = 0;
 
     /// <summary>
     /// Simulation constructor.
     /// </summary>
     /// <param name="map">Map of the simulation.</param>
-    /// <param name="creatures">List of creatures.</param>
-    /// <param name="positions">Starting positions of creatures.</param>
+    /// <param name="items">List of mappable items.</param>
+    /// <param name="positions">Starting positions of items.</param>
     /// <param name="moves">String of moves.</param>
-    /// <exception cref="ArgumentException">Thrown if the creatures list is empty or 
-    /// the number of creatures differs from the number of positions.</exception>
-    public Simulation(Map map, List<Creature> creatures, List<Point> positions, string moves)
+    /// <exception cref="ArgumentException">Thrown if the items list is empty or 
+    /// the number of items differs from the number of positions.</exception>
+    public Simulation(Map map, List<IMappable> items, List<Point> positions, string moves)
     {
-        if (creatures == null || creatures.Count == 0)
-            throw new ArgumentException("Creatures list cannot be empty.");
-
-        if (creatures.Count != positions.Count)
-            throw new ArgumentException("Number of creatures must match the number of positions.");
+        if (items.Count != positions.Count)
+            throw new ArgumentException("Number of items must match number of positions.");
 
         Map = map;
-        Creatures = creatures;
+        Items = items;
         Positions = positions;
         Moves = moves;
-
         _parsedMoves = DirectionParser.Parse(moves);
 
-        for (int i = 0; i < creatures.Count; i++)
+        for (int i = 0; i < items.Count; i++)
         {
-            creatures[i].Map = map;          
-            creatures[i].Position = positions[i]; 
-            map.Add(creatures[i], positions[i]);  
+            Console.WriteLine($"[DEBUG] Initializing {items[i].Name}...");
+
+            items[i].Map = map; // Przypisanie mapy
+            items[i].Position = positions[i]; // Przypisanie pozycji
+            map.Add(items[i], positions[i]); // Dodanie na mapę
+
+            if (items[i].Map == null)
+            {
+                Console.WriteLine($"[ERROR] {items[i].Name} has no map after initialization!");
+            }
+            if (items[i].Position == null)
+            {
+                Console.WriteLine($"[ERROR] {items[i].Name} has no position after initialization!");
+            }
+
+            Console.WriteLine($"[DEBUG] Added {items[i].Name} at position {positions[i]} to the map.");
         }
     }
-
-
 
     /// <summary>
     /// Makes one move of current creature in current direction.
@@ -93,22 +108,37 @@ namespace Simulator;
         if (Finished)
             throw new InvalidOperationException("Simulation is already finished.");
 
-        var currentMove = _parsedMoves[_currentTurn % _parsedMoves.Count];
-        var currentCreature = CurrentCreature;
+        var currentItem = Items[_currentTurn % Items.Count];
 
-        Console.WriteLine($"Turn {_currentTurn + 1}: Moving {currentCreature.Name}");
-        Console.WriteLine($"Current position: {currentCreature.Position}");
+        if (currentItem == null)
+        {
+            Console.WriteLine("[ERROR] Current item is null.");
+            throw new NullReferenceException("Current item is null.");
+        }
 
-        Point newPosition = currentCreature.Go(currentMove);
+        if (currentItem.Map == null)
+        {
+            Console.WriteLine($"[ERROR] {currentItem.Name} has no assigned map.");
+            throw new NullReferenceException($"Item {currentItem.Name} has no assigned map.");
+        }
 
-        Console.WriteLine($"New position: {newPosition}");
+        if (currentItem.Position == null)
+        {
+            Console.WriteLine($"[ERROR] {currentItem.Name} has no assigned position.");
+            throw new NullReferenceException($"Item {currentItem.Name} has no assigned position.");
+        }
+
+        Console.WriteLine($"[DEBUG] Turn {_currentTurn + 1}: Moving {currentItem.Name}");
+
+        currentItem.Move(_parsedMoves[_currentTurn % _parsedMoves.Count]);
+
+        Console.WriteLine($"[DEBUG] {currentItem.Name} moved to {currentItem.Position}");
 
         _currentTurn++;
 
-        if (_currentTurn >= _parsedMoves.Count * Creatures.Count)
+        if (_currentTurn >= _parsedMoves.Count * Items.Count)
         {
             Finished = true;
         }
     }
 }
-
