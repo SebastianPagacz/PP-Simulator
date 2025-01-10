@@ -10,10 +10,10 @@ public class SmallTorusMap : SmallMap
         SizeX = sizeX;
         SizeY = sizeY;
     }
-    public override bool Exist(Point p)
-    {
-        return p.X >= 0 && p.X < SizeX && p.Y >= 0 && p.Y < SizeY;
-    }
+    //public override bool Exist(Point p)
+    //{
+    //    return p.X >= 0 && p.X < SizeX && p.Y >= 0 && p.Y < SizeY;
+    //}
 
     public override Point Next(Point p, Direction d)
     {

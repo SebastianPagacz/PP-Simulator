@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Simulator.Maps;
+using System;
 
 namespace Simulator;
 
-internal abstract class Creature
+public abstract class Creature
 {
     // Member variables
     private string _name = "Unknown";
     private int _level = 1;
+    private Point _position;
+    private Map? _map;
 
     // Name Lenght variables
     int shortNameLen = 3;
@@ -74,16 +77,30 @@ internal abstract class Creature
             }
         }
     }
+
+    public Map? Map
+    {
+        get => _map;
+        set
+        {
+            if (_map == null)
+            {
+                _map = value;
+            }
+        }
+    }
     public abstract string Info
     {
         get;
     }
-
+    public Point? Position { get; set; }
     // Constructors
-    protected Creature(string name, int level = 1)
+    protected Creature(string name, Point? position, Map? map, int level = 1)
     {
         Name = name;
         Level = level;
+        Position = position;
+        Map = map;
     }
 
     protected Creature()
@@ -103,31 +120,17 @@ internal abstract class Creature
     }
 
     // Directions handling
-    public string Go(Direction direction)
+    public Point Go(Direction direction)
     {
-        string directionStr = char.ToLower(direction.ToString()[0]) + direction.ToString().Substring(1);
-
-        return $"{Name} goes {directionStr}";
-    }
-
-
-    public void Go(Direction[] direction)
-    {
-        foreach (var directions in direction)
+        if (Map != null && Position != null)
         {
-            Go(directions);
+            Point newPosition = Map.Move(this, (Point)Position, direction);
+            if (!newPosition.Equals((Point)Position)) 
+            {
+                Position = newPosition;
+            }
         }
-    }
-
-    public void Go(string direction)
-    {
-        // Using parser
-        List<Direction> directions = DirectionParser.Parse(direction);
-
-        foreach (var dir in directions)
-        {
-            Go(dir);
-        }
+        return (Point)Position; 
     }
 
     public override string ToString()
@@ -135,108 +138,11 @@ internal abstract class Creature
         return $"{GetType().Name.ToUpper()}: {Info}";
     }
 
-    // Elf and Orc
-    public class Elf : Creature
+    // Position handling
+    public string WhereCreature()
     {
-        private int _agility;
-        // Count of sing() usage
-        private int singCount;
-
-        //Power level
-        public override int Power => 8 * Level + 2 * _agility;
-
-        public override string Info => $"{Name} [{Level}][{Agility}]";
-        public int Agility
-        {
-            get => _agility;
-            init
-            {
-                if (value < 0)
-                {
-                    value = 0;
-                    _agility = value;
-                }
-                if (value > 10)
-                {
-                    value = 10;
-                    _agility = value;
-                }
-            }
-        }
-        public string Sing()
-        {
-            singCount++;
-
-            if(singCount % 3 == 0)
-            {
-                _agility = Math.Min(_agility + 1, 10);
-            }
-            return $"{Name} is singing.";
-        }
-
-        public Elf() : base() 
-        {
-            _agility = Agility;
-        }
-
-        public Elf(string name, int level = 1, int agility = 1) : base(name, level)
-        {
-            Agility = Validator.Limiter(agility, 0, 10);
-        }
-
-        public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}.";
+        return $"{Name} is on position {Position}";
     }
 
-
-    public class Orc : Creature
-    {
-        private int _rage;
-        //Hunt count
-        private int rageCount;
-
-        //Power level
-        public override int Power => 7 * Level + 3 * _rage;
-
-        public override string Info => $"{Name} [{Level}][{Rage}]";
-        public int Rage 
-        {  
-            get => _rage;
-            init
-            {
-                if(value < 0)
-                {
-                    value = 0;
-                    _rage = value;
-                }
-                if(value > 10)
-                {
-                    value = 10;
-                    _rage = value;
-                }
-            } 
-        }
-        public string Hunt()
-        {
-            rageCount++;
-            if (rageCount % 2 == 0)
-            {
-                _rage = Math.Min(_rage + 1, 10);
-            }
-            return $"{Name} is hunting.";
-        }
-
-        public Orc() : base() 
-        {
-            Rage = _rage;
-        }
-
-        public Orc(string name, int level = 1, int rage = 0) : base(name, level)
-        {
-            Rage = rage;
-            _rage = rage;
-        }
-
-        public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.";
-    }
 
 }

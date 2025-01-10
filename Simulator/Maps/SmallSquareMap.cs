@@ -10,10 +10,10 @@ public class SmallSquareMap : SmallMap
 
     public int SizeX { get; }
     public int SizeY { get; }
-    public override bool Exist(Point p)
-    {
-        return p.X >= 0 && p.Y >= 0 && p.X < SizeX && p.Y < SizeY;
-    }
+    //public override bool Exist(Point p)
+    //{
+    //    return p.X >= 0 && p.Y >= 0 && p.X < SizeX && p.Y < SizeY;
+    //}
     public override Point Next(Point p, Direction d)
     {
         Point n = p.Next(d);

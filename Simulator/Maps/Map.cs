@@ -27,4 +27,30 @@ public abstract class Map
     /// <param name="d">Direction.</param>
     /// <returns>Next point.</returns>
     public abstract Point NextDiagonal(Point p, Direction d);
+
+    /// <summary>
+    /// Adds creature to the map 
+    /// </summary>
+    /// <param name="c">Creature.</param>
+    /// <param name="p">Point.</param>
+    /// <returns></returns>
+    public abstract void Add(Creature creature, Point point);
+
+    /// <summary>
+    /// Moves creature on the map
+    /// </summary>
+    /// <param name="c">Creature.</param>
+    /// <param name="p">Point.</param>
+    /// <param name="d">Direction.</param>
+    /// <returns>Next point.</returns>
+    public abstract Point Move(Creature creature, Point from, Direction direction);
+
+    /// <summary>
+    /// removes creature from the map
+    /// </summary>
+    /// <param name="c">Creature.</param>
+    /// <param name="p">Point.</param>
+    /// <returns></returns>
+    public abstract void Remove(Creature creature, Point point);
+
 }

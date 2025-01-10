@@ -5,8 +5,8 @@
         public readonly int X, Y;
         public Point(int x, int y) => (X, Y) = (x, y);
         public override string ToString() => $"({X}, {Y})";
-    //Nie dziala tak jak powinno 
-        public Point Next(Direction direction)
+  
+    public Point Next(Direction direction)
         {
             switch (direction)
             {
@@ -23,7 +23,6 @@
             }
         }
 
-    //Nie dziala tak jak powinno 
     //rotate given direction 45 degrees clockwise
     public Point NextDiagonal(Direction direction)
     {
