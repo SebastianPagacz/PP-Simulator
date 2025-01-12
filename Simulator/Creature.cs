@@ -12,12 +12,7 @@ namespace Simulator
             get => _name;
             init
             {
-                _name = value.Trim();
-                if (_name.Length < 3)
-                    _name = _name.PadRight(3, '#');
-                if (_name.Length > 25)
-                    _name = _name.Substring(0, 25);
-                _name = char.ToUpper(_name[0]) + _name.Substring(1);
+                _name = Validator.Shortener(value, 3, 25, '#');
             }
         }
         public virtual char Symbol => 'C';

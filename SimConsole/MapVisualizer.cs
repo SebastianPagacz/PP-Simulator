@@ -28,7 +28,7 @@ namespace SimConsole
                 throw new NotSupportedException("MapVisualizer supports only SmallMap-based maps.");
             }
 
-            // Górna ramka
+            // Top frame
             Console.Write(Box.TopLeft);
             for (int x = 0; x < maxX - 1; x++)
             {

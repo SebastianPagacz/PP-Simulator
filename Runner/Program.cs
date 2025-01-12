@@ -14,10 +14,10 @@ public class Program
         List<IMappable> items = new List<IMappable>
 {
     new Elf("Elandor"),
-    new Orc("Gorbag"),
+    new Orc("du"),
     new Animals("Rabbit"),
-    new Animals.Birds("Eagle", canFly: true),
-    new Animals.Birds("Ostrich", canFly: false)
+    new Birds("Eagle", canFly: true),
+    new Birds("Ostrich", canFly: false)
 };
 
         // Przypisujemy pozycje

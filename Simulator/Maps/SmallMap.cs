@@ -76,7 +76,7 @@ public class SmallMap : Map
         if (!Exist(newPosition))
         {
             Console.WriteLine($"[DEBUG] Move aborted: {item.Name} attempted to move outside the map to {newPosition}.");
-            return from; // Zatrzymaj ruch, jeśli nowa pozycja jest poza mapą
+            return from; 
         }
 
         Remove(item, from);
