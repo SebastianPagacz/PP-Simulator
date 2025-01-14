@@ -4,6 +4,17 @@
 /// </summary>
 public abstract class Map
 {
+
+    public int SizeX { get; }
+    public int SizeY { get; }
+
+    public Map(int x, int y)
+    {   
+        if (x < 5|| y < 5) { throw new ArgumentOutOfRangeException("X and Y should be greater than 5"); }
+        SizeX = x;
+        SizeY = y;
+    }
+
     /// <summary>
     /// Check if given point belongs to the map.
     /// </summary>

@@ -10,40 +10,37 @@ public class Program
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        SmallTorusMap map = new SmallTorusMap(5);
-        List<IMappable> items = new List<IMappable>
-{
-    new Elf("Elandor"),
-    new Orc("du"),
-    new Animals("Rabbit"),
-    new Birds("Eagle", canFly: true),
-    new Birds("Ostrich", canFly: false)
-};
+        // Tworzenie mapy
+        var map = new SmallSquareMap(10, 10);
 
-        // Przypisujemy pozycje
-        List<Point> positions = new List<Point>
-{
-    new Point(2, 2),
-    new Point(3, 1),
-    new Point(1, 4),
-    new Point(5, 5),
-    new Point(4, 3)
-};
+        // Tworzenie stworzeń
+        var elf = new Elf("Legolas", map, level: 3, position: new Point(0, 0), agility: 5);
+        var orc = new Orc("Azog", map, level: 4, position: new Point(1, 1), rage: 7);
 
-        // Tworzymy symulację
-        Simulation simulation = new Simulation(map, items, positions, "dddd");
+        // Tworzenie listy stworzeń i ich początkowych pozycji
+        var items = new List<IMappable> { elf, orc };
+        var positions = new List<Point> { new Point(0, 0), new Point(1, 1) };
 
-        MapVisualizer mapVisualizer = new MapVisualizer(simulation.Map);
+        // Definiowanie ruchów (np. URDL)
+        string moves = "URDL";
 
-        while (!simulation.Finished)
+        // Tworzenie symulacji
+        var simulation = new Simulation(map, items, positions, moves);
+
+        // Tworzenie historii symulacji
+        var history = new SimulationHistory(simulation);
+
+        // Wypisanie logów
+        Console.WriteLine("Historia symulacji:");
+        foreach (var log in history.TurnLogs)
         {
-            mapVisualizer.Draw();
-            Console.WriteLine("Press any key to proceed to the next turn...");
-            Console.ReadKey(true); 
-            simulation.Turn();
+            Console.WriteLine($"Mappable: {log.Mappable}, Move: {log.Move}");
+            Console.WriteLine("Stan mapy:");
+            foreach (var symbol in log.Symbols)
+            {
+                Console.WriteLine($"  Pozycja {symbol.Key}: {symbol.Value}");
+            }
+            Console.WriteLine();
         }
-
-        mapVisualizer.Draw();
-        Console.WriteLine("Simulation finished!");
     }
 }

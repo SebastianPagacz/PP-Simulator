@@ -26,16 +26,17 @@ public class SmallMap : Map
         throw new NotImplementedException();
     }
 
-    public SmallMap(Point point)
+    public SmallMap(int x, int y) : base(x, y)
     {
-        ValidateSize(point.X, point.Y);
+        Point point1 = new Point(x, y);
+        ValidateSize(point1.X, point1.Y);
 
-        if (point.X > MaxSizeX || point.Y > MaxSizeY)
+        if (point1.X > MaxSizeX || point1.Y > MaxSizeY)
         {
             throw new ArgumentException($"Map dimensions must not exceed {MaxSizeX}x{MaxSizeY}.");
         }
 
-        Point = point;
+        Point = point1;
     }
 
     protected void ValidateSize(int sizeX, int sizeY)
@@ -93,4 +94,6 @@ public class SmallMap : Map
 
         return mapItems[point];
     }
+
+
 }

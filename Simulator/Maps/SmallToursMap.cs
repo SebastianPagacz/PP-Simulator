@@ -3,13 +3,13 @@ using Simulator;
 
 public class SmallTorusMap : SmallMap
 {
-    public SmallTorusMap(int size) : base(new Point(size, size))
+    public SmallTorusMap(int x, int y) : base(x, y)
     {
-        if (size > 20)
+        if (x > 20 || y > 20)
         {
             throw new ArgumentException("Maximum size for a SmallSquareMap is 20.");
         }
-        Console.WriteLine($"[DEBUG] Created SmallSquareMap with size {size}x{size}.");
+        Console.WriteLine($"[DEBUG] Created SmallSquareMap with size {x} x {y}.");
     }
 
     public override Point Next(Point p, Direction d)
