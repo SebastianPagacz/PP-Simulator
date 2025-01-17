@@ -1,0 +1,49 @@
+﻿@page
+@using Simulator;
+@model SimWeb.Pages.SimulationModel
+@{
+    ViewData["Title"] = "Symulacja";
+}
+
+<div class="map-container">
+    <h1>Tura @Model.Turn</h1>
+
+    <div class="buttons-container">
+        <a asp-page="/Simulation" asp-route-turn="@(Model.Turn == 0 ? 0 : Model.Turn - 1)" class="@(Model.Turn == 0 ? "disabled" : "")">
+            <span class="btn">&larr;</span>
+        </a>
+        <a asp-page="/Simulation" asp-route-turn="@(Model.Turn == Model.MaxTurn ? Model.MaxTurn : Model.Turn + 1)" class="@(Model.Turn == Model.MaxTurn ? "disabled" : "")">
+            <span class="btn">&rarr;</span>
+        </a>
+    </div>
+
+    <div class="table-container">
+        <table>
+            <tbody>
+                @for (int i = Model.Y - 1; i >= 0; i--)
+                {
+                    <tr>
+                        @for (int j = 0; j < Model.X; j++)
+                        {
+                            Point point = new Point(j, i);
+                            <td>
+                                <div class="icon-container">
+                                    @if (Model.Symbols.ContainsKey(point))
+                                    {
+                                        foreach (var icon in Model.Symbols[point])
+                                        {
+                                            <img src="@icon" alt="Icon" class="map-icon" />
+                                        }
+                                    }
+                                </div>
+                            </td>
+
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <p class="text-danger mt-3 fw-bold">@Model.MoveDescription</p>
+</div>

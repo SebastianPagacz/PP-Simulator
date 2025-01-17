@@ -1,0 +1,187 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f9;
+    color: #333;
+}
+
+header {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+header .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center}
+
+header .navbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    margin: 0 10px;
+}
+
+header .navbar a:hover {
+    text-decoration: underline;
+}
+
+header .navbar ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+header .navbar ul li {
+    margin-right: 15px;
+}
+
+.btn {
+    display: inline-block;
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+.btn.disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    pointer-events: none; /* Wy³¹cz interakcjê */
+}
+
+
+
+/* Stylizacja tabeli */
+/* Tabela */
+table {
+    width: 400px;
+    height: 400px;
+    border-collapse: collapse;
+    margin: 0 auto;
+}
+
+td {
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+/* Ikony */
+.map-icon {
+    width: 40px;
+    height: 40px;
+    margin: 2px;
+    display: inline-block;
+}
+
+
+
+td:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+td:hover {
+    background-color: #f1f1f1;
+}
+
+h1 {
+    color: #007bff;
+    font-size: 28px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+p {
+    font-size: 18px;
+    text-align: center;
+}
+
+footer {
+    background-color: #007bff;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+}
+
+/* Wyœrodkowanie mapy */
+.map-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 70vh;
+}
+
+/* Wyœrodkowanie przycisków */
+.buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+/* Stylizacja tabeli */
+table {
+    border: 2px solid black;
+    border-collapse: collapse;
+    margin: 0 auto; /* Wyœrodkowanie tabeli */
+    background-color: white;
+    table-layout: fixed; /* Ka¿da komórka ma ten sam rozmiar */
+    width: 400px; /* Sta³a szerokoœæ tabeli */
+    height: 400px; /* Sta³a wysokoœæ tabeli */
+}
+
+td {
+    border: 1px solid #ddd;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    vertical-align: middle;
+    width: 50px; /* Sta³a szerokoœæ komórki */
+    height: 50px; /* Sta³a wysokoœæ komórki */
+    background-color: #f9f9f9; /* T³o komórki */
+}
+
+td:hover {
+    background-color: #f1f1f1; /* Kolor po najechaniu myszk¹ */
+}
+/* Stylizacja kontenera na ikony */
+.icon-container {
+    display: flex; /* Ustawienie elastycznego uk³adu */
+    justify-content: center; /* Wyœrodkowanie ikon w poziomie */
+    align-items: center; /* Wyœrodkowanie ikon w pionie */
+    flex-wrap: wrap; /* Pozwala na zawijanie ikon, jeœli jest ich za du¿o */
+    gap: 4px; /* Odstêp miêdzy ikonami */
+    height: 100%; /* Dopasowanie do wysokoœci komórki tabeli */
+    width: 100%; /* Dopasowanie do szerokoœci komórki tabeli */
+}
+
+/* Stylizacja ikon */
+.map-icon {
+    width: 40px;
+    height: 40px;
+    display: inline-block;
+}

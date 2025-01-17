@@ -1,0 +1,26 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - SimWeb</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="flex-container">
+                <button><a asp-page="/Index">Informacje</a></button>
+                <button><a asp-page="/Simulation">Symulacja</a></button>
+            </div>
+        </nav>
+    </header>
+    <main role="main">
+            @RenderBody()
+    </main>
+    <footer>
+        <div>Sebastian Pagacz &copy;</div>
+    </footer>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

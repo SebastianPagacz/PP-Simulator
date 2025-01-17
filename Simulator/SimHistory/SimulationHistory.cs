@@ -54,7 +54,7 @@ public class SimulationHistory
 
                 TurnLogs.Add(new SimulationTurnLog
                 {
-                    Mappable = currentCreature.ToString(),
+                    Mappable = currentCreature.ToString() ?? "Unknown",
                     Move = currentMove,
                     Symbols = beforeMoveSymbols
                 });
