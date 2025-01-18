@@ -14,19 +14,7 @@ public class Orc : Creature
     public int Rage
     {
         get => _rage;
-        init
-        {
-            if (value < 0)
-            {
-                value = 0;
-                _rage = value;
-            }
-            if (value > 10)
-            {
-                value = 10;
-                _rage = value;
-            }
-        }
+        init => _rage = Validator.Limiter(value,0, 10);
     }
     public string Hunt()
     {
@@ -50,4 +38,13 @@ public class Orc : Creature
     }
 
     public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my rage is {Rage}.";
+
+    public void InteractWithAnimal(Animals animal)
+    {
+        if (Map != null && Position.HasValue)
+        {
+            Map.Remove(animal, Position.Value);
+            _rage += 2;
+        }
+    }
 }

@@ -15,9 +15,9 @@
                 case Direction.Right:
                     return new Point(X + 1, Y);
                 case Direction.Up:
-                    return new Point(X, Y + 1);
-                case Direction.Down:
                     return new Point(X, Y - 1);
+                case Direction.Down:
+                    return new Point(X, Y + 1);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(direction), "Invalid direction");
             }

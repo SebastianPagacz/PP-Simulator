@@ -22,30 +22,30 @@ namespace SimWeb.Pages
                 turn = 0;
             }
 
-            SmallTorusMap map = new(8, 6);
+            SmallTorusMap map = new(7, 7); // Create a SmallTorusMap with size 7x7
 
             List<IMappable> creatures = new()
-            {
-                new Elf("Elandor"),
-                new Orc("Gorbag"),
-                new Animals("Rabbits"),
-                new Birds("Eagles", true),
-                new Birds("Ostriches", false),
-            };
+{
+    new Orc("Gorbag",null, 8),       // Orc
+    new Animals("Rabbit"),   // Animal
+    new Elf("Elandor"),      // Elf
+    new Birds("Eagle", true) // Bird
+};
 
             List<Point> points = new()
-            {
-                new(2, 2),
-                new(3, 1),
-                new(4, 5),
-                new(0, 1),
-                new(1, 0),
-            };
+{
+    new Point(2, 1), // Orc's starting position
+    new Point(1, 2), // Animal's position
+    new Point(5, 5), // Elf's starting position
+    new Point(6, 5)  // Bird's position
+};
 
-            string moves = "ruldlurdruldlur";
+            // Moves designed for all interactions and battle
+            string moves = "drlrruullddrruuullddll";
 
             Simulation simulation = new(map, creatures, points, moves);
             SimulationHistory history = new(simulation);
+
 
             if (turn > history.TurnLogs.Count - 1)
             {

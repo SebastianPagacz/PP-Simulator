@@ -1,8 +1,6 @@
-﻿using System;
+﻿// Simulation.cs
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Simulator.Maps;
 
 namespace Simulator;
@@ -46,7 +44,7 @@ public class Simulation
         get
         {
             var item = Items[_currentTurn % Items.Count];
-            return item as Creature; // Zwróć null, jeśli nie jest typu Creature
+            return item as Creature;
         }
     }
 
@@ -65,8 +63,6 @@ public class Simulation
     /// <param name="items">List of mappable items.</param>
     /// <param name="positions">Starting positions of items.</param>
     /// <param name="moves">String of moves.</param>
-    /// <exception cref="ArgumentException">Thrown if the items list is empty or 
-    /// the number of items differs from the number of positions.</exception>
     public Simulation(Map map, List<IMappable> items, List<Point> positions, string moves)
     {
         if (items.Count != positions.Count)
@@ -84,7 +80,7 @@ public class Simulation
             if (!map.Exist(position))
             {
                 Console.WriteLine($"[WARNING] Initial position {position} for {items[i].Name} is outside the map boundaries. Assigning to position (0,0).");
-                position = new Point(0, 0); // Przypisz pozycję domyślną
+                position = new Point(0, 0);
             }
 
             items[i].Map = map;
@@ -98,7 +94,6 @@ public class Simulation
     /// <summary>
     /// Makes one move of current creature in current direction.
     /// </summary>
-    /// <exception cref="InvalidOperationException">Thrown if simulation is finished.</exception>
     public void Turn()
     {
         if (Finished)
@@ -106,36 +101,76 @@ public class Simulation
 
         var currentItem = Items[_currentTurn % Items.Count];
 
-        if (currentItem == null)
+        if (currentItem is Creature creature)
         {
-            Console.WriteLine("[ERROR] Current item is null.");
-            throw new NullReferenceException("Current item is null.");
-        }
+            if (creature.Map == null || creature.Position == null)
+                throw new InvalidOperationException($"Creature {creature.Name} is not properly initialized.");
 
-        if (currentItem.Map == null)
+            var position = creature.Position.Value;
+            var occupants = Map.At(position).ToList(); // Create a copy to avoid modification issues
+
+            foreach (var occupant in occupants)
+            {
+                if (creature is Orc orc && occupant is Animals animal)
+                {
+                    orc.InteractWithAnimal(animal);
+                    Map.Remove(animal, position); // Remove animal after interaction
+                    Items.Remove(animal);
+                }
+                else if (creature is Elf elf && occupant is Birds bird)
+                {
+                    elf.InteractWithBird(bird);
+                    Map.Remove(bird, position); // Remove bird after interaction
+                    Items.Remove(bird);
+                }
+                else if (creature is Orc orc2 && occupant is Elf elf2)
+                {
+                    HandleBattle(orc2, elf2);
+                }
+            }
+
+            creature.Move(_parsedMoves[_currentTurn % _parsedMoves.Count]);
+        }
+        else if (currentItem is Animals || currentItem is Birds)
         {
-            Console.WriteLine($"[ERROR] {currentItem.Name} has no assigned map.");
-            throw new NullReferenceException($"Item {currentItem.Name} has no assigned map.");
+            currentItem.Move(_parsedMoves[_currentTurn % _parsedMoves.Count]);
         }
-
-        if (currentItem.Position == null)
-        {
-            Console.WriteLine($"[ERROR] {currentItem.Name} has no assigned position.");
-            throw new NullReferenceException($"Item {currentItem.Name} has no assigned position.");
-        }
-
-        Console.WriteLine($"[DEBUG] Turn {_currentTurn + 1}: Moving {currentItem.Name} ({currentItem.Symbol}).");
-
-        // Wykonanie ruchu
-        currentItem.Move(_parsedMoves[_currentTurn % _parsedMoves.Count]);
-
-        Console.WriteLine($"[DEBUG] {currentItem.Name} moved to {currentItem.Position}.");
 
         _currentTurn++;
-
         if (_currentTurn >= _parsedMoves.Count * Items.Count)
         {
             Finished = true;
+        }
+    }
+
+    /// <summary>
+    /// Handles a battle between an orc and an elf.
+    /// </summary>
+    /// <param name="orc">The orc involved in the battle.</param>
+    /// <param name="elf">The elf involved in the battle.</param>
+    private void HandleBattle(Orc orc, Elf elf)
+    {
+        int orcStats = (int)(orc.Level * 1.5 + orc.Rage) / 2;
+        int elfStats = (int)(elf.Level * 1.5 + elf.Agility) / 2;
+
+        if (orcStats > elfStats)
+        {
+            // Orc wins, Elf is removed
+            Console.WriteLine($"Battle: {orc.Name} defeated {elf.Name}");
+            Map.Remove(elf, elf.Position.Value);
+            Items.Remove(elf);
+        }
+        else if (elfStats > orcStats)
+        {
+            // Elf wins, Orc is removed
+            Console.WriteLine($"Battle: {elf.Name} defeated {orc.Name}");
+            Map.Remove(orc, orc.Position.Value);
+            Items.Remove(orc);
+        }
+        else
+        {
+            // Tie - no one is removed
+            Console.WriteLine($"Battle: {orc.Name} and {elf.Name} tied.");
         }
     }
 }

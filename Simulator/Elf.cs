@@ -14,19 +14,7 @@ public class Elf : Creature
     public int Agility
     {
         get => _agility;
-        init
-        {
-            if (value < 0)
-            {
-                value = 0;
-                _agility = value;
-            }
-            if (value > 10)
-            {
-                value = 10;
-                _agility = value;
-            }
-        }
+        init => _agility = Validator.Limiter(value, 0, 10); 
     }
     public string Sing()
     {
@@ -49,5 +37,13 @@ public class Elf : Creature
         Agility = Validator.Limiter(agility, 0, 10);
     }
 
+    public void InteractWithBird(Birds bird)
+    {
+        if (Map != null && Position.HasValue)
+        {
+            Map.Remove(bird, Position.Value);
+            _agility += 2;
+        }
+    }
     public override string Greeting() => $"Hi, I'm {Name}, my level is {Level}, my agility is {Agility}.";
 }
