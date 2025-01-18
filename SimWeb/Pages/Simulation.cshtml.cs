@@ -69,21 +69,32 @@ namespace SimWeb.Pages
             {
                 Point position = entry.Key;
                 char symbol = entry.Value;
-                string iconPath = symbol switch
-                {
-                    'E' => "/images/icons/elf.png",         // Elf
-                    'O' => "/images/icons/orc.png",         // Orc
-                    'A' => "/images/icons/animal.png",      // Domy�lny symbol zwierz�t
-                    'B' => "/images/icons/bird_fly.png",    // Ptaki lataj�ce
-                    'b' => "/images/icons/bird_walk.png",   // Ptaki nielataj�ce
-                    _ => "/images/icons/default.png"
-                };
 
-                if (!Symbols.ContainsKey(position))
+                // Sprawdzenie, czy pole jest już zajęte przez inne ikony
+                if (Symbols.ContainsKey(position) && Symbols[position].Count > 0)
                 {
-                    Symbols[position] = new List<string>();
+                    // Wyświetlanie ikony "X" dla zajętego pola
+                    Symbols[position] = new List<string> { "/images/icons/multiple.png" };
                 }
-                Symbols[position].Add(iconPath);
+                else
+                {
+                    // Normalne dodawanie ikon na wolnych polach
+                    string iconPath = symbol switch
+                    {
+                        'E' => "/images/icons/elf.png",         // Elf
+                        'O' => "/images/icons/orc.png",         // Orc
+                        'A' => "/images/icons/animal.png",      // Domyślny symbol zwierząt
+                        'B' => "/images/icons/bird_fly.png",    // Ptaki latające
+                        'b' => "/images/icons/bird_walk.png",   // Ptaki nielatające
+                        _ => "/images/icons/default.png"
+                    };
+
+                    if (!Symbols.ContainsKey(position))
+                    {
+                        Symbols[position] = new List<string>();
+                    }
+                    Symbols[position].Add(iconPath);
+                }
             }
         }
     }
