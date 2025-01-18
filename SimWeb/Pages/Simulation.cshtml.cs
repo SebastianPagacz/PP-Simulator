@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Simulator;
 using Simulator.Maps;
+using System;
+using System.Collections.Generic;
 
 namespace SimWeb.Pages
 {
@@ -14,6 +16,42 @@ namespace SimWeb.Pages
         public string MoveDescription { get; set; }
         public Dictionary<Point, List<string>> Symbols { get; set; } = new();
 
+        private static readonly List<string> OrcNames = new() { "Gorath", "Thargok", "Mogrim", "Drogath" };
+        private static readonly List<string> ElfNames = new() { "Elandor", "Sylwen", "Therion", "Lirael" };
+        private static readonly List<string> AnimalTypes = new() { "Rabbit", "Pig", "Fox", "Wolf" };
+        private static readonly List<string> BirdTypes = new() { "Eagle", "Sparrow", "Hawk", "Raven" };
+
+        private static readonly Random Random = new();
+
+        private static string PersistentOrcName;
+        private static string PersistentElfName;
+        private static string PersistentAnimalType;
+        private static string PersistentBirdType;
+
+        private static readonly List<string> PossibleMoves = new()
+        {
+            "drlrruullddrruuullddll",
+            "rullddrruulldrrddluurr",
+            "llrruuddrruullrrddluud",
+            "ddrruullrrddlluurrddll"
+        };
+
+        private static string PersistentMoves; // Deklaracja pola
+
+        private static void InitializeRandomMoves() // Definicja metody
+        {
+            Random random = new();
+            PersistentMoves = PossibleMoves[random.Next(PossibleMoves.Count)];
+        }
+
+        private static void InitializeRandomNames()
+        {
+            PersistentOrcName = OrcNames[Random.Next(OrcNames.Count)];
+            PersistentElfName = ElfNames[Random.Next(ElfNames.Count)];
+            PersistentAnimalType = AnimalTypes[Random.Next(AnimalTypes.Count)];
+            PersistentBirdType = BirdTypes[Random.Next(BirdTypes.Count)];
+        }
+
         public void OnGet()
         {
             int turn;
@@ -22,30 +60,37 @@ namespace SimWeb.Pages
                 turn = 0;
             }
 
+            if (PersistentOrcName == null || PersistentElfName == null || PersistentAnimalType == null || PersistentBirdType == null)
+            {
+                InitializeRandomNames();
+            }
+
+            // Inicjalizacja losowych ruchów, jeśli jeszcze nie zostały ustawione
+            if (PersistentMoves == null)
+            {
+                InitializeRandomMoves();
+            }
+
             SmallTorusMap map = new(7, 7); // Create a SmallTorusMap with size 7x7
 
             List<IMappable> creatures = new()
-{
-    new Orc("Gorbag",null, 8),       // Orc
-    new Animals("Rabbit"),   // Animal
-    new Elf("Elandor"),      // Elf
-    new Birds("Eagle", true) // Bird
-};
+            {
+                new Orc(PersistentOrcName, null, 8),       // Orc
+                new Animals(PersistentAnimalType),   // Animal
+                new Elf(PersistentElfName),      // Elf
+                new Birds(PersistentBirdType, true) // Bird
+            };
 
             List<Point> points = new()
-{
-    new Point(2, 1), // Orc's starting position
-    new Point(1, 2), // Animal's position
-    new Point(5, 5), // Elf's starting position
-    new Point(6, 5)  // Bird's position
-};
+            {
+                new Point(2, 1), // Orc's starting position
+                new Point(1, 2), // Animal's position
+                new Point(5, 5), // Elf's starting position
+                new Point(6, 5)  // Bird's position
+            };
 
-            // Moves designed for all interactions and battle
-            string moves = "drlrruullddrruuullddll";
-
-            Simulation simulation = new(map, creatures, points, moves);
+            Simulation simulation = new(map, creatures, points, PersistentMoves);
             SimulationHistory history = new(simulation);
-
 
             if (turn > history.TurnLogs.Count - 1)
             {
